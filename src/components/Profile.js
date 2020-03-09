@@ -4,14 +4,18 @@ import { Link } from 'react-router-dom'
 import withStyles from '@material-ui/core/styles/withStyles'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Paper, Typography, IconButton } from '@material-ui/core'
+import { Paper, Typography } from '@material-ui/core'
 import MuiLink from '@material-ui/core/Link'
 import LocationOn from '@material-ui/icons/LocationOn'
 import LinkIcon from '@material-ui/icons/Link'
 import CalendarToday from '@material-ui/icons/CalendarToday'
 import dayJs from 'dayjs'
 import EditIcon from '@material-ui/icons/Edit'
-import Tooltip from '@material-ui/core/Tooltip'
+import { upLoadImage, logOut } from '../redux/actions/userAction'
+import KeyBoardReturn from '@material-ui/icons/KeyboardReturn'
+import EditDetails from './EditDetails'
+import MyButton from '../util/MyButton'
+
 
 const styles = (theme) => ({
     paper: {
@@ -63,25 +67,29 @@ const styles = (theme) => ({
 
 
 export class Profile extends Component {
+
     handleImageChange = (event) => {
         const image = event.target.files[0]
         const formData = new FormData
         formData.append('image', image, image.name)
-        this.props.uploadImage(formData)
+        this.props.upLoadImage(formData)
     }
     handleEditPicture = () => {
         const fileInput = document.getElementById('image')
         fileInput.click()
     }
+    handleLogout = () => {
+        this.props.logOut()
+    }
     render() {
-
-        const { classes,
-            user: { credentials:
-                { handle, createdAt, imageUrl, bio, website, location },
+        const {
+            classes,
+            user: {
+                credentials: { handle, createdAt, imageUrl, bio, website, location },
                 loading,
                 authenticated
             }
-        } = this.props
+        } = this.props;
 
         let profileMarkUp = !loading ?
             (authenticated ?
@@ -92,27 +100,25 @@ export class Profile extends Component {
                                 alt='profile'
                                 className='profile-image' />
                             <input type='file' id='image' onChange={this.handleImageChange} hidden='hidden' />
-                            <Tooltip title='edit profile picture' placement='top'>
-                                <IconButton onClick={this.handleEditPicture} className='button'>
-                                    <EditIcon color='primary'></EditIcon>
-                                </IconButton>
-                            </Tooltip>
-
+                            <MyButton tip='edit profile picture' onClick={this.handleEditPicture} btnClassName='button'>
+                                <EditIcon color='primary'></EditIcon>
+                            </MyButton>
                         </div>
                         <div className='profile-details'>
                             <MuiLink component={Link}
                                 to={`/users/${handle}`}
                                 color='primary'
-                                variant='h5'>@{handle}
+                                variant='h5'>
+                                @{handle}
                             </MuiLink>
                             <hr />
                             {bio && <Typography variant={"body2"}>{bio}</Typography>}
                             <hr />
                             {location && <Fragment>
-                                (<LocationOn color='primary'><span>{location}</span>
-                                    <hr />
-                                </LocationOn>)
+                                <LocationOn color='primary'></LocationOn>
+                                {location}
                             </Fragment>}
+                            <hr />
                             {website && (<Fragment>
                                 <LinkIcon color='primary' />
                                 <a href={website} target='_blank' rel='noopener noreferrer'>
@@ -120,9 +126,14 @@ export class Profile extends Component {
                                     {website}
                                 </a>
                             </Fragment>)}
+                            <hr />
                             <CalendarToday color='primary' />
                             <span> Joined {dayJs(createdAt).format('MMM YYYY')}</span>
                         </div>
+                        <MyButton tip='Logout' onClick={this.handleLogout} >
+                            <KeyBoardReturn color='primary' />
+                        </MyButton>
+                        <EditDetails />
                     </div>
                 </Paper >) : (
                     <Paper className={classes.paper}>
@@ -155,7 +166,10 @@ const mapStateToProps = (state) => ({
 
 Profile.propTypes = {
     user: PropTypes.object.isRequired,
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    logOut: PropTypes.func.isRequired,
+    upLoadImage: PropTypes.func.isRequired
+
 }
 
-export default connect(mapStateToProps)(withStyles(styles)(Profile))
+export default connect(mapStateToProps, { logOut, upLoadImage })(withStyles(styles)(Profile))

@@ -1,6 +1,7 @@
 import { SET_USER, SET_ERRORS, CLEAR_ERRORS, LOADING_UI, SET_UNAUTHENTICATED, LOADING_USER } from '../reducers/types'
 import axios from 'axios'
 
+
 export const loginUser = (userData, history) => (dispatch) => {
     dispatch({ type: LOADING_UI })
     axios
@@ -20,8 +21,8 @@ export const loginUser = (userData, history) => (dispatch) => {
 }
 
 export const logOut = () => (dispatch) => {
-    localStorage.removeItem('FBIdToken')
-    delete axios.defaults.headers.common['Authorization']
+    localStorage.removeItem('FBIdToken');
+    delete axios.defaults.headers.common['Authorization'];
     dispatch({ type: SET_UNAUTHENTICATED })
 }
 
@@ -63,4 +64,18 @@ const setAuthorizationHeader = (token) => {
 
 export const upLoadImage = (formData) => (dispatch) => {
     dispatch({ type: LOADING_USER })
+    axios.post('/user/image', formData)
+        .then(() => {
+            dispatch(getUserData())
+        })
+        .catch(err => console.log(err))
+}
+
+export const EditUserDetails = (userDetails) => (dispatch) => {
+    dispatch({ type: LOADING_USER })
+    axios.post('/user', userDetails)
+        .then(() => {
+            dispatch(getUserData())
+        })
+        .catch(err => console.log(err))
 }
