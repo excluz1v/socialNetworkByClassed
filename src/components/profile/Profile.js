@@ -11,10 +11,11 @@ import LinkIcon from '@material-ui/icons/Link'
 import CalendarToday from '@material-ui/icons/CalendarToday'
 import dayJs from 'dayjs'
 import EditIcon from '@material-ui/icons/Edit'
-import { upLoadImage, logOut } from '../redux/actions/userAction'
+import { upLoadImage, logOut } from '../../redux/actions/userAction'
 import KeyBoardReturn from '@material-ui/icons/KeyboardReturn'
 import EditDetails from './EditDetails'
-import MyButton from '../util/MyButton'
+import MyButton from '../../util/MyButton'
+import ProfileSceleton from '../../util/ProfileSceleton'
 
 
 const styles = (theme) => ({
@@ -55,7 +56,10 @@ const styles = (theme) => ({
             '&:hover': {
                 cursor: 'pointer'
             }
-        }
+        },
+        // '& button': {
+        //     float: 'right'
+        // }
     },
     buttons: {
         textAlign: 'center',
@@ -70,7 +74,7 @@ export class Profile extends Component {
 
     handleImageChange = (event) => {
         const image = event.target.files[0]
-        const formData = new FormData
+        const formData = new FormData()
         formData.append('image', image, image.name)
         this.props.upLoadImage(formData)
     }
@@ -155,7 +159,7 @@ export class Profile extends Component {
                         </Button>
                         </div>
                     </Paper>
-                )) : (<p>Loading </p>)
+                )) : <ProfileSceleton />
         return profileMarkUp
     }
 }

@@ -40,7 +40,7 @@ export class login extends Component {
         })
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         if (nextProps.UI.errors) {
             this.setState({ errors: nextProps.UI.errors })
         }
@@ -64,6 +64,7 @@ export class login extends Component {
                             name="email"
                             type="email"
                             label="email"
+                            autoComplete="email"
                             className={classes.TextField}
                             value={this.state.email}
                             onChange={this.handleChange}
@@ -75,6 +76,7 @@ export class login extends Component {
                             name="password"
                             type="password"
                             label="password"
+                            autoComplete="current-password"
                             className={classes.TextField}
                             value={this.state.password}
                             onChange={this.handleChange}

@@ -47,7 +47,7 @@ export class signup extends Component {
             [event.target.name]: event.target.value
         })
     }
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         if (nextProps.UI.errors) {
             this.setState({ errors: nextProps.UI.errors })
         }
@@ -70,6 +70,7 @@ export class signup extends Component {
                             name="email"
                             type="email"
                             label="email"
+                            autoComplete='email'
                             className={classes.TextField}
                             value={this.state.email}
                             onChange={this.handleChange}
@@ -81,6 +82,7 @@ export class signup extends Component {
                             name="password"
                             type="password"
                             label="password"
+                            autoComplete="current-password"
                             className={classes.TextField}
                             value={this.state.password}
                             onChange={this.handleChange}
@@ -91,6 +93,7 @@ export class signup extends Component {
                         <TextField id="confirmPassword"
                             name="confirmPassword"
                             type="password"
+                            autoComplete="current-password"
                             label="confirm Password"
                             className={classes.TextField}
                             value={this.state.confirmPassword}
@@ -101,6 +104,7 @@ export class signup extends Component {
                         </TextField>
                         <TextField id="handle"
                             name="handle"
+                            autoComplete="username"
                             type="text"
                             label="Handle"
                             className={classes.TextField}

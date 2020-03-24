@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import Grid from '@material-ui/core/Grid'
-import Scream from '../components//Scream'
-import Profile from '../components/Profile'
+import Scream from '../components/scream/Scream'
+import Profile from '../components/profile/Profile'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { getScreams } from '../redux/actions/dataActions'
+import ScreamSceleton from '../util/ScreamSceleton'
 
 export class home extends Component {
     componentDidMount() {
@@ -15,10 +16,9 @@ export class home extends Component {
         const { screams, loading } = this.props.data
         let recentScream = !loading ?
             screams.map(scream => {
-
                 return <Scream key={scream.screamId} scream={scream}></Scream>
             })
-            : <p>Loading...</p>
+            : <ScreamSceleton />
         return (
             <Grid container spacing={10}>
                 <Grid item sm={8} xs={12}>

@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import home from './pages/home'
 import signup from './pages/signup'
 import login from './pages/login'
-import Navbar from './components/Navbar';
+import Navbar from './components/layout/Navbar';
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles'
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
 import themeFile from './util/theme'
@@ -14,9 +14,12 @@ import store from './redux/reducers/store'
 import { Provider } from 'react-redux'
 import { SET_AUTHENTICATED } from './redux/reducers/types'
 import { logOut, getUserData } from './redux/actions/userAction'
-import axios from 'axios';
+import axios from 'axios'
+import User from './pages/user'
 
 const theme = createMuiTheme(themeFile)
+
+axios.defaults.baseURL = 'https://europe-west1-social-network-v2.cloudfunctions.net/api'
 
 const token = localStorage.FBIdToken
 if (token) {
@@ -43,6 +46,8 @@ function App() {
                 <Route exact path='/' component={home} />
                 <AuthRoute exact path='/signup' component={signup} />
                 <AuthRoute exact path='/login' component={login} />
+                <Route exact path='/users/:handle' component={User} />
+                <Route exact path='/users/:handle/scream/:screamId' component={User} />
               </Switch>
             </div>
           </Router>
